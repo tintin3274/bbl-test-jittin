@@ -1,5 +1,6 @@
 package com.example.bbl_test_jittin.controller;
 
+import com.example.bbl_test_jittin.model.CustomError;
 import com.example.bbl_test_jittin.model.User;
 import com.example.bbl_test_jittin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class UserController {
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(400))
-                    .body(e.getMessage());
+                    .body(new CustomError(e.getMessage()));
         }
     }
 
@@ -56,7 +57,7 @@ public class UserController {
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(400))
-                    .body(e.getMessage());
+                    .body(new CustomError(e.getMessage()));
         }
     }
 
