@@ -265,13 +265,15 @@ public class UserService {
         return userMap.get(userId);
     }
 
-    public User createUser(User userRequest) {
+    public User createUser(User userRequest) throws Exception {
+        validationUser(userRequest);
         userRequest.setId(++counterId);
         userMap.put(userRequest.getId(), userRequest);
         return userRequest;
     }
 
-    public User updateUser(long userId, User userRequest) {
+    public User updateUser(long userId, User userRequest) throws Exception {
+        validationUser(userRequest);
         User userOld = userMap.get(userId);
         if (userOld != null) {
             userRequest.setId(userId);
@@ -283,6 +285,16 @@ public class UserService {
 
     public User deleteUser(long userId) {
         return userMap.remove(userId);
+    }
+
+    public void validationUser(User user) throws Exception {
+        // For POST and PUT requests, ensure that name, username, and email fields are provided (i.e., not null or empty).
+        if (user == null
+                || user.getName() == null || user.getName().isEmpty()
+                || user.getUsername() == null || user.getUsername().isEmpty()
+                || user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new Exception("User value of name, username, email is required.");
+        }
     }
 
 }

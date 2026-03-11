@@ -32,20 +32,32 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User userRequest) {
-        return ResponseEntity.status(HttpStatusCode.valueOf(201))
-                .body(userService.createUser(userRequest));
+    public ResponseEntity<?> createUser(@RequestBody User userRequest) throws Exception {
+        try {
+            return ResponseEntity.status(HttpStatusCode.valueOf(201))
+                    .body(userService.createUser(userRequest));
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(400))
+                    .body(e.getMessage());
+        }
     }
 
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> updateUser(@PathVariable long userId, @RequestBody User userRequest) {
-        User user = userService.updateUser(userId, userRequest);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatusCode.valueOf(404))
-                    .body(null);
+    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User userRequest) throws Exception {
+        try {
+            User user = userService.updateUser(userId, userRequest);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatusCode.valueOf(404))
+                        .body(null);
+            }
+            return ResponseEntity.ok(user);
         }
-        return ResponseEntity.ok(user);
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(400))
+                    .body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{userId}")
